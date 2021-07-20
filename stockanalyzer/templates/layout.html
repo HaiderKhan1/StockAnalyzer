@@ -24,8 +24,13 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <a class="nav-item nav-link active" href="{{url_for('home')}}">Home <span class="sr-only">(current)</span></a>
+            {%if current_user.is_authenticated%}
+            <a class="nav-item nav-link" href="{{url_for('logout')}}">Logout</a>
+            <a class="nav-item nav-link" href="{{url_for('account')}}">Account</a>
+            {%else%}
             <a class="nav-item nav-link" href="{{url_for('register')}}">Register</a>
             <a class="nav-item nav-link" href="{{ url_for('login') }}">login</a>
+            {%endif%}
           </div>
         </div>
       </nav>
