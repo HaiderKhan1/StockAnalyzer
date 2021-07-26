@@ -1,16 +1,15 @@
-from flask import render_template, url_for, flash, redirect
+from flask import render_template, url_for, flash, redirect, request
 from stockanalyzer import app, bcrypt, db
 from stockanalyzer.forms import RegistrationForm, LoginForm
 from stockanalyzer.models import User, Watchlist
 from flask_login import login_user, current_user, logout_user, login_required
+from stockanalyzer.api_caller import validate_ticker, validate_name
 
-
-ratios = [{"pe":20, "eps":30, "working_ratio":4}, {"pe":30, "eps":10, "working_ratio":1}]
 
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template("home.html", stocks_info=ratios, title="HomePages")
+    return render_template("home.html", title="HomePage")
 
 @app.route("/register", methods = ['GET', 'POST'])
 def register():
@@ -53,4 +52,20 @@ def logout():
 @login_required
 def account():
     return render_template('account.html', title='Account')
-   
+
+#----------------------------------------------------------------------------
+
+@app.route('/get_stock_info', methods = ["POST"])
+def get_stock():
+    name = request.form['stock_input']
+    if validate_ticker(str(name)):
+        print("ticker")
+        return render_template("home.html", stocks_info=name, title="HomePage")
+    else: 
+        ret_val = validate_name(str(name))
+        if (ret_val == -1):      
+            return render_template("home.html", stocks_info="Please enter a valid name or symbol", title="HomePage")
+        else:
+            print("name") 
+            return render_template("home.html", stocks_info=ret_val, title="HomePage")
+

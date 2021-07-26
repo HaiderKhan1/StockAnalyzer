@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for i in stocks_info %}
-        <p>Stock info: {{i.pe}} {{i.eps}}</p>
-    {% endfor %}
+    <p>Stock name: {{stocks_info}} </p>
+
+    <form action = 'get_stock_info' method = "post">
+        <p>Enter Stock Name: </p>
+        <p><input type = "text" name = "stock_input"/></p>
+        <p><input type = "submit" name = "submit"/></p>
+    </form>
+
 {%endblock content%}
