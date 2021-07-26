@@ -68,4 +68,5 @@ def get_stock():
         else:
             print("name") 
             return render_template("home.html", stocks_info=ret_val, title="HomePage")
+    
 
