@@ -1,11 +1,17 @@
 {% extends "layout.html" %}
-{% block content %}
+{% block landing %}
+    
+<div class="flex-container">
+    <div> 
+        <form action = 'get_stock_info' method = "post">
+            <p>Enter Stock Ticker Or Name: </p>
+            <p><input type = "text" name = "stock_input" placeholder="Search"/> 
+                <button class = "button2 button12" name = "submit" input type = "submit">Submit</button>
+                </p>
+        </form>
+    </div>  
+  </div>
+
     <p>Stock name: {{stocks_info}} </p>
 
-    <form action = 'get_stock_info' method = "post">
-        <p>Enter Stock Name: </p>
-        <p><input type = "text" name = "stock_input"/></p>
-        <p><input type = "submit" name = "submit"/></p>
-    </form>
-
-{%endblock content%}
+{%endblock landing%}
