@@ -13,6 +13,8 @@
     <link rel="stylesheet" type="text/css" href="static/css/nav.css">
 
     <title>{{ title }}</title>
+
+    {%block landing_head%}{%endblock%}
   
 </head>
 
@@ -22,7 +24,7 @@
     {%if current_user.is_authenticated%}
     <li><a class="active" href="{{url_for('home')}}">Home</a></li>
     <li><a href="{{url_for('logout')}}">Logout</a></li>
-    <li><a href="{{url_for('account')}}">Account</a></li>
+    <li class = "right"><a href="{{url_for('account')}}">Account</a></li>
     {%else%}
     <li><a class="active" class="nav-item nav-link" href="{{ url_for('landing') }}">Home</a></li>
     <li><a href="{{url_for('register')}}">Register</a></li>
@@ -48,7 +50,10 @@
       </div>
     </main>
 
+   
+    {%block landing%} {%endblock%}
   
+
     <div class = "footer">
       <div class = "inner_footer">
         <div class = "logo_container">
