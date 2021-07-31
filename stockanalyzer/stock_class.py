@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 fapi_key = {
     'X-API-KEY': '0lLQYJeZw77eiDnmaeNk28pLAdKzK4Aw174peJKr'
@@ -30,22 +31,52 @@ class stock():
         response = requests.request("GET", url, headers=headers, params=querystring)
         data = json.loads(response.text)
         
-        #get the full name
-        if len(data["price"]) > 0 and data["price"]["longName"]:
+        #get info
+        if data["price"]["longName"]:
             self.stock_info["full_name"] = data["price"]["longName"]
-        else:
-            self.stock_info["full_name"] = self.ticker
         
-        #get business description
-        if len(data["summaryProfile"]) > 0 and data["summaryProfile"]["longBusinessSummary"]:
+        if data["summaryProfile"]["longBusinessSummary"]:
             self.stock_info["business_summary"] = data["summaryProfile"]["longBusinessSummary"]
-        else:
-            self.stock_info["business_summary"] = None
 
-        #get key financials
+        if data["financialData"]["recommendationKey"]:
+            self.stock_info["finance_recommendation"] = data["financialData"]["recommendationKey"]
         
-    #get the average of the stocks in the same industry
-    #set the value of the industry averages 
+        if data["financialData"]["totalDebt"]["fmt"]:
+            self.stock_info["totalDebt"] = data["financialData"]["totalDebt"]["fmt"]
+        
+        if data["financialData"]["returnOnEquity"]["fmt"]:
+            self.stock_info["roe"] = data["financialData"]["returnOnEquity"]["fmt"]
+
+        if data["defaultKeyStatistics"]["enterpriseValue"]["fmt"]:
+            self.stock_info["ev"] = data["defaultKeyStatistics"]["enterpriseValue"]["fmt"]
+
+        #get comparison financials
+        params = (('lang', 'en'),('region', 'US'),('modules', 'defaultKeyStatistics,assetProfile'))
+        summary_url = 'https://yfapi.net/v11/finance/quoteSummary/'+self.ticker
+        response = requests.get(url = summary_url, headers=fapi_key, params=params)
+        fdata = json.loads(response.text)
+        
+        #get forward P/E
+        if fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]["fmt"]:
+            self.stock_info["pe"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]["fmt"])
+            
+        #get eps
+        if fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"]:
+            self.stock_info["eps"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"])
+                    
+        #get peg
+        if fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"]:
+            self.stock_info["peg"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"])
+                
+        #get price to book
+        if fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"]:
+            self.stock_info["ptb"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"])
+            
+        #get ebita
+        if fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["enterpriseToEbitda"]["fmt"]:
+            self.stock_info["ebita"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["enterpriseToEbitda"]["fmt"])
+                
+
     def get_stocks_similars(self):
         # get similars
         url = 'https://yfapi.net/v6/finance/recommendationsbysymbol/'+self.ticker
@@ -95,37 +126,44 @@ class stock():
         #calculate industry averages
         if eps_tracker > 0:
             self.industry_averages["avg_eps"] = avg_eps/eps_tracker
-        else:
-            self.industry_averages["avg_eps"] = "N/A"
 
         if pe_tracker > 0:
             self.industry_averages["avg_pe"] = avg_pe/pe_tracker
-        else:
-            self.industry_averages["avg_pe"] = "N/A"
         
         if ptb_tracker > 0:
             self.industry_averages["avg_ptb"] = avg_ptb/ptb_tracker
-        else:
-            self.industry_averages["avg_ptb"] = "N/A"
         
         if ebita_tracker > 0:
             self.industry_averages["avg_ebita"] = avg_ebita/ebita_tracker
-        else:
-            self.industry_averages["avg_ebita"] = "N/A"
-        
+
         if peg_tracker > 0:
             self.industry_averages["avg_peg"] = avg_peg/peg_tracker
-        else:
-            self.industry_averages["avg_peg"] = 'N/A'
             
     #check if the inputted stock is above or below average
     #return over valued or under valued
     def fundemental_analysis(self):
-        print("whatever")
+        points = 0
+        ret_statement = ""
 
+        if self.stock_info["peg"] > 2:
+            return "ov"
+        elif self.stock_info["eps"] > self.industry_averages["avg_eps"] and self.stock_info["peg"] < self.stock_info["avg_peg"]:
+            return "uv"
+        else:
+            return "fv" 
+        
+
+start_time = time.time()
 stock = stock("aapl")
 stock.get_stocks_similars()
+stock.get_stock_info()
+print(stock.stock_info)
+print("---------------------")
 print(stock.industry_averages)
+print("---------------------")
+print("%s"%(time.time() - start_time))
 
-#specific to the stock in question: working capital, free cash flow, enterpirse value
+
+
+
 

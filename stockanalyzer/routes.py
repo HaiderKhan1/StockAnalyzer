@@ -7,6 +7,9 @@ from stockanalyzer.api_caller import validate_ticker, validate_name
 
 
 @app.route("/")
+def landing():
+    return render_template("landing.html", title = "Landing Page")
+
 @app.route("/home")
 def home():
     return render_template("home.html", title="HomePage")
