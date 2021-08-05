@@ -11,10 +11,7 @@ headers = {
     'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com"
 }
 
-class stock():
-    # class variable
-    benchmark_avarage = {}
-    
+class Stock():    
     #constructor method
     def __init__(self, input):
         #instance variables
@@ -32,23 +29,35 @@ class stock():
         data = json.loads(response.text)
         
         #get info
-        if data["price"]["longName"]:
+        if "longName" in data["price"]:
             self.stock_info["full_name"] = data["price"]["longName"]
+        else:
+            self.stock_info["full_name"] = self.ticker
         
-        if data["summaryProfile"]["longBusinessSummary"]:
+        if "longBusinessSummary" in data["summaryProfile"]:
             self.stock_info["business_summary"] = data["summaryProfile"]["longBusinessSummary"]
+        else:
+            self.stock_info["business_summary"] = "null"
 
-        if data["financialData"]["recommendationKey"]:
+        if "recommendationKey" in data["financialData"]:
             self.stock_info["finance_recommendation"] = data["financialData"]["recommendationKey"]
+        else:
+            self.stock_info["finance_recommendation"] = "null"
         
-        if data["financialData"]["totalDebt"]["fmt"]:
-            self.stock_info["totalDebt"] = data["financialData"]["totalDebt"]["fmt"]
+        if "fmt" in data["financialData"]["totalDebt"]:
+            self.stock_info["total_debt"] = data["financialData"]["totalDebt"]["fmt"]
+        else:
+            self.stock_info["total_debt"] = "null"
         
-        if data["financialData"]["returnOnEquity"]["fmt"]:
+        if "fmt" in data["financialData"]["returnOnEquity"]:
             self.stock_info["roe"] = data["financialData"]["returnOnEquity"]["fmt"]
+        else:
+            self.stock_info["roe"] = "null"
 
-        if data["defaultKeyStatistics"]["enterpriseValue"]["fmt"]:
+        if "fmt" in data["defaultKeyStatistics"]["enterpriseValue"]:
             self.stock_info["ev"] = data["defaultKeyStatistics"]["enterpriseValue"]["fmt"]
+        else:
+            self.stock_info["ev"] = "null"
 
         #get comparison financials
         params = (('lang', 'en'),('region', 'US'),('modules', 'defaultKeyStatistics,assetProfile'))
@@ -57,25 +66,29 @@ class stock():
         fdata = json.loads(response.text)
         
         #get forward P/E
-        if fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]["fmt"]:
+        if "fmt" in fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]:
             self.stock_info["pe"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]["fmt"])
+        else:
+            self.stock_info["pe"] = "null"
             
         #get eps
-        if fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"]:
+        if "fmt" in fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]:
             self.stock_info["eps"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"])
+        else:
+            self.stock_info["eps"] = "null"
                     
         #get peg
-        if fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"]:
+        if "fmt" in fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]:
             self.stock_info["peg"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"])
+        else:
+            self.stock_info["peg"] = "null"
                 
         #get price to book
-        if fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"]:
+        if "fmt" in fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]:
             self.stock_info["ptb"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"])
+        else:
+            self.stock_info["ptb"] = "null"
             
-        #get ebita
-        if fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["enterpriseToEbitda"]["fmt"]:
-            self.stock_info["ebita"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["enterpriseToEbitda"]["fmt"])
-                
 
     def get_stocks_similars(self):
         # get similars
@@ -83,7 +96,7 @@ class stock():
         response = requests.get(url = url, headers=fapi_key)
         data_symbols = json.loads(response.text)
         recomendations = []
-        if data_symbols["finance"]["result"][0]["recommendedSymbols"]:
+        if "recommendedSymbols" in data_symbols["finance"]["result"][0]:
             for i in data_symbols["finance"]["result"][0]["recommendedSymbols"]:
                 recomendations.append(i["symbol"])
         
@@ -99,62 +112,77 @@ class stock():
             response = requests.get(url = summary_url, headers=fapi_key, params=params)
             data = json.loads(response.text)
             #get forward P/E
-            if data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]["fmt"]:
+            if "fmt" in data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]:
                 avg_pe += float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]["fmt"])
                 pe_tracker+=1
             
             #get eps
-            if data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"]:
+            if "fmt" in data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]:
                 avg_eps+= float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"])
                 eps_tracker+=1
             
             #get peg
-            if data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"]:
+            if "fmt" in data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]:
                 avg_peg += float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"])
                 peg_tracker += 1
             
             #get price to book
-            if data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"]:
+            if "fmt" in data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]:
                 avg_ptb += float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"])
                 ptb_tracker += 1
-            
-            #get ebita
-            if data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["enterpriseToEbitda"]["fmt"]:
-                avg_ebita += float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["enterpriseToEbitda"]["fmt"])
-                ebita_tracker += 1
 
         #calculate industry averages
         if eps_tracker > 0:
             self.industry_averages["avg_eps"] = avg_eps/eps_tracker
+        else:
+            self.industry_averages["avg_eps"] = "null"
 
         if pe_tracker > 0:
             self.industry_averages["avg_pe"] = avg_pe/pe_tracker
+        else:
+            self.industry_averages["avg_pe"] = "null"
         
         if ptb_tracker > 0:
             self.industry_averages["avg_ptb"] = avg_ptb/ptb_tracker
-        
-        if ebita_tracker > 0:
-            self.industry_averages["avg_ebita"] = avg_ebita/ebita_tracker
+        else:
+            self.industry_averages["avg_ptb"] = "null"
 
         if peg_tracker > 0:
             self.industry_averages["avg_peg"] = avg_peg/peg_tracker
+        else:
+            self.industry_averages["avg_peg"] = "null"
             
     #check if the inputted stock is above or below average
     #return over valued or under valued
     def fundemental_analysis(self):
         points = 0
-        ret_statement = ""
-
-        if self.stock_info["peg"] > 2:
-            return "ov"
-        elif self.stock_info["eps"] > self.industry_averages["avg_eps"] and self.stock_info["peg"] < self.stock_info["avg_peg"]:
-            return "uv"
+        # lets check for the peg
+        if self.stock_info["peg"] != "null" and self.industry_averages["avg_peg"] != "null":
+            if self.stock_info["peg"] > 2:
+                return "High PEG Ratio Indicates: Over Valued"
+            else: 
+                if self.stock_info["peg"] < self.industry_averages["avg_peg"]:
+                    points+=1
+                else:
+                    points+=0.5
+        if self.stock_info["eps"] != "null" and self.industry_averages["avg_eps"] != "null":
+            if self.stock_info["eps"] > self.industry_averages["avg_eps"]:
+                points +=1
+            else:
+                points += 0.5
+        
+        if points == 2:
+            return "Under Valued"
+        elif points == 1:
+            return "Fair Valued"
         else:
-            return "fv" 
+            "Could Not Compute"
         
 
+
+
 start_time = time.time()
-stock = stock("aapl")
+stock = Stock("intc")
 stock.get_stocks_similars()
 stock.get_stock_info()
 ret = stock.fundemental_analysis()

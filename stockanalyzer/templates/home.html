@@ -1,17 +1,56 @@
 {% extends "layout.html" %}
 {% block landing %}
     
-<div class="flex-container">
+<div class="flex-containerSearch">
     <div> 
         <form action = 'get_stock_info' method = "post">
             <p>Enter Stock Ticker Or Name: </p>
-            <p><input type = "text" name = "stock_input" placeholder="Search"/> 
+            <p><input type = "text" name = "stock_input" placeholder="Search" required/> 
                 <button class = "button2 button12" name = "submit" input type = "submit">Submit</button>
                 </p>
         </form>
     </div>  
   </div>
 
-    <p>Stock name: {{stocks_info}} </p>
+
+
+    {%if verified%}
+
+    <div class="flex-containerSearch">
+      <div> 
+        <p style = "font-family:courier,arial,helvetica;">Stock Symbol: {{stocks_info}} </p>
+      </div>  
+    </div>
+
+    <div class="flex-containerSearch">
+      <div> 
+        <p style = "font-family:helvetica; font-size: 1vw;">{{stock_info["longBusinessSummary"]}} </p>
+      </div>  
+    </div>
+
+    <table>
+        <tr>
+          <th>Firstname</th>
+          <th>Similar Companies Averages:</th>
+        </tr>
+        <tr>
+          <td>Earnings Per Share: </td>
+          <td>Griffin</td>
+        </tr>
+        <tr>
+          <td>Lois</td>
+          <td>Griffin</td>
+        </tr>
+        <tr>
+          <td>Joe</td>
+          <td>Swanson</td>
+        </tr>
+        <tr>
+          <td>Cleveland</td>
+          <td>Brown</td>
+      </tr>
+      </table>
+
+    {%endif%}
 
 {%endblock landing%}

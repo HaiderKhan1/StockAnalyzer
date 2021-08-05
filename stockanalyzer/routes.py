@@ -4,6 +4,7 @@ from stockanalyzer.forms import RegistrationForm, LoginForm
 from stockanalyzer.models import User, Watchlist
 from flask_login import login_user, current_user, logout_user, login_required
 from stockanalyzer.api_caller import validate_ticker, validate_name
+from stockanalyzer.stock_class import Stock
 
 
 @app.route("/")
@@ -62,14 +63,20 @@ def account():
 def get_stock():
     name = request.form['stock_input']
     if validate_ticker(str(name)):
-        print("ticker")
-        return render_template("home.html", stocks_info=name, title="HomePage")
+        data = Stock(str(name))
+        data.get_stock_info()
+        data.get_stocks_similars()
+        ret = data.fundemental_analysis()
+        return render_template("home.html", title="HomePage", verified = "yes", stock_info = data.stock_info, ind_avg = data.industry_averages, analysis = ret)
     else: 
         ret_val = validate_name(str(name))
         if (ret_val == -1):      
             return render_template("home.html", stocks_info="Please enter a valid name or symbol", title="HomePage")
         else:
-            print("name") 
-            return render_template("home.html", stocks_info=ret_val, title="HomePage")
+            data = Stock(ret_val)
+            data.get_stock_info()
+            data.get_stocks_similars()
+            ret = data.fundemental_analysis()
+            return render_template("home.html", title="HomePage", verified = "yes", stock_info = data.stock_info, ind_avg = data.industry_averages, analysis = ret)
     
 
