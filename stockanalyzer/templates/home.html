@@ -9,7 +9,15 @@
                 <button class = "button2 button12" name = "submit" input type = "submit">Submit</button>
                 </p>
         </form>
-    </div>  
+    </div>
+    {%if verified%}
+    <div>
+      <p>Add Stock to Watchlist? </p>
+      <form action = 'add_to_watchlist' method = "post">
+          <button class = "button2 button12" name = "submit" input type = "submit">Add to Watchlist</button>    
+    </form>
+    </div>
+    {%endif%}  
   </div>
 
 
@@ -18,36 +26,64 @@
 
     <div class="flex-containerSearch">
       <div> 
-        <p style = "font-family:courier,arial,helvetica;">Stock Symbol: {{stocks_info}} </p>
+        <p style = "font-family:courier,arial,helvetica;">Stock Symbol: {{stock_info["ticker"]}} </p>
       </div>  
     </div>
 
     <div class="flex-containerSearch">
+      <div style="flex-grow: 6"> 
+        <p style = "font-family:helvetica; font-size: 1.25vw;">{{stock_info["business_summary"]}} </p>
+      </div> 
+    </div>
+
+    <div class="flex-containerSearch2">
       <div> 
-        <p style = "font-family:helvetica; font-size: 1vw;">{{stock_info["longBusinessSummary"]}} </p>
+        <p style = "font-family:courier,arial,helvetica;">Fundemental Analysis: </p> <br>
+        <p style = "font-family:courier,arial,helvetica;">{{analysis}} </p>
+      </div>  
+
+      <div> 
+        <p style = "font-family:courier,arial,helvetica;">Yahoo Finance Recommendation: </p> <br>
+        <p style = "font-family:courier,arial,helvetica;">{{stock_info["finance_recommendation"]}} </p>
+      </div>  
+
+      <div> 
+        <p style = "font-family:courier,arial,helvetica;">Financial Debt: </p> <br>
+        <p style = "font-family:courier,arial,helvetica;">{{stock_info["total_debt"]}} </p>
+      </div>  
+      <div> 
+        <p style = "font-family:courier,arial,helvetica;">Enterprise Value: </p> <br>
+        <p style = "font-family:courier,arial,helvetica;">{{stock_info["ev"]}} </p>
+      </div>  
+
+      <div> 
+        <p style = "font-family:courier,arial,helvetica;"> Return on Equity </p> <br>
+        <p style = "font-family:courier,arial,helvetica;">{{stock_info["roe"]}} </p>
       </div>  
     </div>
 
+    <p></p>
+    
     <table>
         <tr>
-          <th>Firstname</th>
-          <th>Similar Companies Averages:</th>
+          <th>Company Name: {{stock_info["full_name"]}}</th>
+          <th>Similar Companies in Industry: {{ind_avg["similar_companies"]}}</th>
         </tr>
         <tr>
-          <td>Earnings Per Share: </td>
-          <td>Griffin</td>
+          <td>Earnings Per Share: {{stock_info["eps"]}}</td>
+          <td>Earnings Per Share: {{ind_avg["avg_eps"]}}</td>
         </tr>
         <tr>
-          <td>Lois</td>
-          <td>Griffin</td>
+          <td>Price to Earnings: {{stock_info["pe"]}}</td>
+          <td>Earnings Per Share: {{ind_avg["avg_eps"]}}</td>
         </tr>
         <tr>
-          <td>Joe</td>
-          <td>Swanson</td>
+          <td>Price-To-Earnings to Growth Ratio: {{stock_info["peg"]}}</td>
+          <td>Earnings Per Share: {{ind_avg["avg_eps"]}}</td>
         </tr>
         <tr>
-          <td>Cleveland</td>
-          <td>Brown</td>
+          <td>Price to Book Ratio: {{stock_info["ptb"]}}</td>
+          <td>Earnings Per Share: {{ind_avg["avg_eps"]}}</td>
       </tr>
       </table>
 

@@ -25,44 +25,6 @@ body, html {
     color: white;
   }
 
-  .button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 16px 60px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-  }
-  
-  .button1 {
-    background-color: white; 
-    color: black; 
-    border: 2px solid #4CAF50;
-  }
-  
-  .button1:hover {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .button2 {
-    background-color: white; 
-    color: black; 
-    border: 2px solid #4CAF50;
-  }
-  
-  .button2:hover {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .button1 {border-radius: 12px;}
-  .button2 {border-radius: 12px;}
 </style>
   
 {%endblock landing_head%}
@@ -75,21 +37,22 @@ body, html {
       <h1 style="font-size:5vw">Stock Analyzer</h1>
       <p style="font-size:1.5vw">Know the True Worth Before Buying</p>
       <button class = "button button1" onclick="window.location.href='{{url_for('login')}}'">Log In</button><br>
-      <button class = "button button2" onclick="window.location.href='{{url_for('register')}}'">Sign Up</button><br>
+      <button class = "button button1" onclick="window.location.href='{{url_for('register')}}'">Sign Up</button><br>
     </div>
   </div>
 <br>
-  <center>
-  <h1 style="font-size:3vw; font-family:verdana">
+  
+<div class = "philcontainer">
+  <h1 style="font-size:2vw; font-family:verdana">
     Fundemental Philosophy
   </h1> 
-  <p style="font-weight: bold; font-size:1.5vw"> Price is what you pay, Value is what you - Warren Buffet</p>
-  <p style="font-size:1.5vw; font-family:verdana"> As Warren Buffet says, one of the most important things to understand about investing is that
-    there is a dintinct difference between price and the actual value of stock, and that not every stock price will always reflect intrinsic value of it.
+  <p style="font-weight: bold; font-size:1.5vw"> "Price is what you pay, Value is what you Get"</p>
+  <p style="font-size:1vw; font-family:verdana"> As Warren Buffet says, one of the most important things to understand about investing is that
+    there is a distinct difference between price and the actual value of stock, and that not every stock price will always reflect it's intrinsic value.
     In fact, the divergence between the price and value is essentially what allows for taking advantage of undervalued stocks and outperforming the average return of the market.
   </p>
 
-</center>
+</div>
   
 {%endblock landing%}
 

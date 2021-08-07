@@ -138,19 +138,20 @@ ul.topnav li.right {float: right;}
   font-size: 1.5vw;
 }
 
-/* Container for the search box*/
-.flex-containerName {
+.flex-containerSearch2 {
   display: flex;
   justify-content: center;
+  background-color: #333;
 
 }
 
-.flex-containerName > div {
-  color: rgb(33, 240, 33);
+.flex-containerSearch2 > div {
+  color: rgb(255, 255, 255);
   margin: 10px;
   text-align: center;
   font-size: 1.5vw;
 }
+
 
 
 
