@@ -1,6 +1,5 @@
 from stockanalyzer import db, login_manager
 from flask_login import UserMixin
-import requests
 
 @login_manager.user_loader
 def load_user(user_id):

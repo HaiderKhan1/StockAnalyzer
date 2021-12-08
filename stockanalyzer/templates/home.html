@@ -10,6 +10,7 @@
                 </p>
         </form>
     </div>
+    
     {%if verified%}
     <div>
       <p>Add Stock to Watchlist? </p>
@@ -17,7 +18,8 @@
           <button class = "button2 button12" name = "submit" input type = "submit">Add to Watchlist</button>    
     </form>
     </div>
-    {%endif%}  
+    {%endif%}
+
   </div>
 
 
@@ -75,18 +77,20 @@
         </tr>
         <tr>
           <td>Price to Earnings: {{stock_info["pe"]}}</td>
-          <td>Earnings Per Share: {{ind_avg["avg_eps"]}}</td>
+          <td>Price to Earnings: {{ind_avg["avg_pe"]}}</td>
         </tr>
         <tr>
           <td>Price-To-Earnings to Growth Ratio: {{stock_info["peg"]}}</td>
-          <td>Earnings Per Share: {{ind_avg["avg_eps"]}}</td>
+          <td>Price-To-Earnings to Growth Ratio: {{ind_avg["avg_peg"]}}</td>
         </tr>
         <tr>
           <td>Price to Book Ratio: {{stock_info["ptb"]}}</td>
-          <td>Earnings Per Share: {{ind_avg["avg_eps"]}}</td>
+          <td>Price to Book Ratio: {{ind_avg["avg_ptb"]}}</td>
       </tr>
       </table>
 
     {%endif%}
 
 {%endblock landing%}
+
+

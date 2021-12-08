@@ -95,25 +95,27 @@ class Stock():
         
         #get forward P/E
         if "fmt" in fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]:
-            self.stock_info["pe"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]["fmt"])
+            self.stock_info["pe"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]["fmt"].replace(",", ""))
         else:
             self.stock_info["pe"] = "null"
             
         #get eps
         if "fmt" in fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]:
-            self.stock_info["eps"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"])
+            print("*****************************************************************************************************")
+            print(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"])
+            self.stock_info["eps"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"].replace(",", ""))
         else:
             self.stock_info["eps"] = "null"
                     
         #get peg
         if "fmt" in fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]:
-            self.stock_info["peg"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"])
+            self.stock_info["peg"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"].replace(",", ""))
         else:
             self.stock_info["peg"] = "null"
                 
         #get price to book
         if "fmt" in fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]:
-            self.stock_info["ptb"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"])
+            self.stock_info["ptb"] = float(fdata["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"].replace(",", ""))
         else:
             self.stock_info["ptb"] = "null"
             
@@ -141,22 +143,22 @@ class Stock():
             data = json.loads(response.text)
             #get forward P/E
             if "fmt" in data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]:
-                avg_pe += float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]["fmt"])
+                avg_pe += float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardPE"]["fmt"].replace(",", ""))
                 pe_tracker+=1
             
             #get eps
             if "fmt" in data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]:
-                avg_eps+= float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"])
+                avg_eps+= float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["forwardEps"]["fmt"].replace(",", ""))
                 eps_tracker+=1
             
             #get peg
             if "fmt" in data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]:
-                avg_peg += float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"])
+                avg_peg += float((data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["pegRatio"]["fmt"]).replace(",", ""))
                 peg_tracker += 1
             
             #get price to book
             if "fmt" in data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]:
-                avg_ptb += float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"])
+                avg_ptb += float(data["quoteSummary"]["result"][0]["defaultKeyStatistics"]["priceToBook"]["fmt"].replace(",", ""))
                 ptb_tracker += 1
 
         #calculate industry averages

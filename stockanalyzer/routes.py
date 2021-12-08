@@ -79,4 +79,3 @@ def get_stock():
             ret = data.fundemental_analysis()
             return render_template("home.html", title="HomePage", verified = "yes", stock_info = data.stock_info, ind_avg = data.industry_averages, analysis = ret)
     
-
